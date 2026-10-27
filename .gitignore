@@ -5,3 +5,12 @@ dist/
 *.log
 .DS_Store
 .claude
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+crash.log
+override.tf
+override.tf.json

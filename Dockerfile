@@ -12,7 +12,7 @@
 FROM node:20-alpine AS client-build
 WORKDIR /app/client
 COPY client/package*.json ./
-RUN npm ci
+RUN npm ci --include=dev
 COPY client/ ./
 RUN npm run build
 # Output lands in /app/client/dist (Vite's default build output folder)
