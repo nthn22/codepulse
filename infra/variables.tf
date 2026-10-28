@@ -12,8 +12,8 @@ variable "vpc_cidr" {
 
 variable "use_nat_gateway" {
   description = "Whether to use a NAT Gateway"
-  type = bool
-  default = false
+  type        = bool
+  default     = false
 }
 
 variable "project_name" {
