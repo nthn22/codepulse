@@ -1,5 +1,9 @@
 # This file contains the network resources for the CodePulse project.
 
+# Basic summary - we create the main vpc, split that vpc into 6 subnets
+# for high availability across 2 AZs. divide these into tiers. create
+# gateways as the exit. route tables determine which exit the data takes
+# the associations connect each tier to its route table
 
 # define the VPC
 resource "aws_vpc" "main_vpc" {
@@ -14,6 +18,7 @@ resource "aws_vpc" "main_vpc" {
 
 #local map with for_each to create the required subnets
 #without having to define each subnet individually
+#two subnets per tier to allow for high availability across two AZs
 locals {
     azs = ["us-east-1a", "us-east-1b"]
 
@@ -50,6 +55,7 @@ resource "aws_internet_gateway" "main_gw" {
 }
 
 # create the EIP for the NAT Gateway if use_nat_gateway is true
+# this is b/c a NAT needs an EIP for outbound traffic
 resource "aws_eip" "nat" {
   count = var.use_nat_gateway ? 1 : 0 #remember for allocation to use list
   domain = "vpc"
@@ -96,6 +102,9 @@ resource "aws_route_table" "app_rt" {
         Name    = "${var.project_name}-app-rt"
     }
 }
+
+# we create two separate route blocks for the app RT
+# flip between depending if app use a NAT or not
 
 # create route to nat if app uses it
 resource "aws_route" "app_via_nat" {
