@@ -28,3 +28,5 @@ resource "aws_db_instance" "rds_instance" {
   storage_encrypted       = true  # encrypt the storage for security
   backup_retention_period = 0     # number of days to retain backups, set to 0 to disable backups
 }
+
+ 
