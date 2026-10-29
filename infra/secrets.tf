@@ -35,7 +35,7 @@ resource "aws_secretsmanager_secret" "db_secret" {
 resource "aws_secretsmanager_secret_version" "db_secret_version" {
   secret_id     = aws_secretsmanager_secret.db_secret.id
   secret_string = "postgresql://${aws_db_instance.rds_instance.username}:${random_password.rds_password.result}@${aws_db_instance.rds_instance.address}:5432/${aws_db_instance.rds_instance.db_name}"
-  # postgresql is the protocal prisma expects
+  # postgresql is the protocol prisma expects
   # ${aws_db_instance.rds_instance.username} is the username
   # ${random_password.rds_password.result} is the password
   # ${aws_db_instance.rds_instance.address} is the RDS hostname (address, not endpoint)
