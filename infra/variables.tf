@@ -32,3 +32,7 @@ variable "image_tag" {
   description = "Container image tag"
   type        = string
 }
+
+variable "alert_email" {
+  type = string
+}
