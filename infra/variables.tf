@@ -21,3 +21,14 @@ variable "project_name" {
   type        = string
   default     = "codepulse"
 }
+
+variable "desired_count" {
+  description = "Desired count for ecs instance"
+  type        = number
+  default     = 0
+}
+
+variable "image_tag" {
+  description = "Container image tag"
+  type        = string
+}
