@@ -1,0 +1,61 @@
+# deploy yaml file
+name: Deploy CodePulse
+
+on:
+    push:
+        branches: [main]
+    workflow_dispatch: 
+
+permissions:
+    id-token: write
+    contents: read
+
+env:
+    AWS_REGION: us-east-2
+    TF_VAR_alert_email: ${{ vars.ALERT_EMAIL }} # repo variable set in GitHub setting
+
+jobs:
+    test:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - uses: actions/setup-node@v4
+            with:
+                node-version: ""
+            - name: Install and test
+            working-directory: 
+            run: |
+                npm ci
+
+
+build:
+    needs: 
+    runs-on: ubuntu-latest
+    steps:
+        - uses: actions/checkout@v4
+        - name: Build image (verify only, no push)
+          run: docker build -t codepulse:${{ github.sha }} .
+
+deploy: 
+    needs: build
+    if: github.event_name == 'build'
+    runs-on: ubuntu-latest
+        defaults:
+            run:
+                working-directory: infra
+        steps:
+            - uses: actions/checkout@v4
+
+            - uses: aws-actions/configure-aws-credentials@v4
+              with: 
+                role-to-assume: 'tbd'
+                aws-region: ${{ env.AWS_REGION }}
+
+            - uses: hashicorp/setup-terraform@v3
+
+            - run: terraform init
+
+            -name: Create infra (no tasks yet)
+            run: terraform apply -auto-approve -var="image_tag=${{ github.sha }}" -var="desired_count=1"
+            
+
