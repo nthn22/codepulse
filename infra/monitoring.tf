@@ -26,7 +26,7 @@ resource "aws_cloudwatch_metric_alarm" "alb_5xx" {
   treat_missing_data  = "notBreaching" # no traffic means no data - don't want it as alarm
 
   dimensions = {
-    LoadBalancer = aws_lb.alb.arn_suffix # alb listener
+    LoadBalancer = aws_lb.alb.arn_suffix # alb suffix
   }
 
   alarm_actions = [aws_sns_topic.alerts.arn] #send alarm here
@@ -41,7 +41,7 @@ resource "aws_cloudwatch_metric_alarm" "waf_blocked" {
   alarm_description   = "Alarm for WAF blocking requests"
   namespace           = "AWS/WAFV2" # waf namespace
   metric_name         = "BlockedRequests"
-  statistic           = Sum
+  statistic           = "Sum"
   period              = 300 # 5 min in sec
   evaluation_periods  = 1
   threshold           = 50 # to indicate someone's being blocked
@@ -49,7 +49,7 @@ resource "aws_cloudwatch_metric_alarm" "waf_blocked" {
   treat_missing_data  = "notBreaching"
 
   dimensions = {
-    WEBACL = aws_wafv2_web_acl.waf.name # web acl name 
+    WebACL = aws_wafv2_web_acl.waf.name # web acl name 
     Region = var.region
     Rule   = "ALL"
   }

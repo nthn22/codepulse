@@ -18,7 +18,6 @@ resource "aws_lb" "alb" {
 
 #create the alb target group
 
-## look to make a /api/health route for health check since there isn't one
 resource "aws_lb_target_group" "alb_target_group" {
   name                 = "${var.project_name}-alb-target-group"
   port                 = 3001
@@ -27,7 +26,7 @@ resource "aws_lb_target_group" "alb_target_group" {
   target_type          = "ip" # fargate registers tasks by IP address, not instance ID
   deregistration_delay = 30   # so deploy and destroy don't hang for 5 minute (default)
   health_check {
-    path                = "/"
+    path                = "/api/health" #health check path from src
     interval            = 30
     timeout             = 5
     healthy_threshold   = 2
