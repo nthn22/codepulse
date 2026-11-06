@@ -51,6 +51,6 @@ module "monitoring" {
   source         = "./modules/monitoring"
   project_name   = var.project_name
   alert_email    = var.alert_email
-  alb_arn_suffix = var.alb_arn_suffix
-  waf_name       = var.waf_name
+  alb_arn_suffix = module.load_balancer.alb_arn_suffix
+  waf_name       = module.load_balancer.waf_name
 }
