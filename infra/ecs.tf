@@ -104,7 +104,7 @@ resource "aws_ecs_service" "app" {
   network_configuration {
     #get the subnets of app
     subnets          = [for k, v in module.network.app_subnet.ids : aws_subnet.this[k].id if v.tier == "app"]
-    security_groups  = [aws_security_group.task_sg.id]
+    security_groups  = [module.security.task_sg_id] # task security group
     assign_public_ip = !var.use_nat_gateway #assign public ip if we don't use NAT
   }
 
