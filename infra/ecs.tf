@@ -113,7 +113,7 @@ resource "aws_ecs_service" "app" {
     container_name   = local.container_name
     container_port   = 3001
   }
-  # make sure the alb listener is ready before starting the service
-  depends_on = [module.load_balancer.alb_listener]
+  # make sure the load balancer module exists
+  depends_on = [module.load_balancer]
 
 }
