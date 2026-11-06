@@ -9,7 +9,7 @@ resource "aws_lb" "alb" {
   internal                   = false
   load_balancer_type         = "application"
   security_groups            = [module.security.alb_sg_id]
-  subnets                    = [for k, v in module.network.public_subnet.ids : aws_subnet.this[k].id if v.tier == "public"] # get all public subnets for the alb
+  subnets                    = module.network.public_subnet_ids #gets the output of the public subnet ids
   enable_deletion_protection = false                                                                     # set to true in production to prevent accidental deletion, false so destroy is easier
   tags = {
     Name = "${var.project_name}-alb"

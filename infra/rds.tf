@@ -3,7 +3,7 @@
 # rds subnet group
 resource "aws_db_subnet_group" "rds_subnet_group" {
   name       = "${var.project_name}-rds-subnet-group"
-  subnet_ids = [for k, v in module.network.db_subnet.ids : aws_subnet.this[k].id if v.tier == "private"] # get all private subnets for the rds subnet group
+  subnet_ids = module.network.private_subnet_ids # get all private subnets for the rds subnet group
   tags = {
     Name = "${var.project_name}-rds-subnet-group"
   }
