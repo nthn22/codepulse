@@ -3,7 +3,7 @@
 # rds subnet group
 resource "aws_db_subnet_group" "rds_subnet_group" {
   name       = "${var.project_name}-rds-subnet-group"
-  subnet_ids = module.network.private_subnet_ids # get all private subnets for the rds subnet group
+  subnet_ids = var.db_subnet_ids # get all private subnets for the rds subnet group
   tags = {
     Name = "${var.project_name}-rds-subnet-group"
   }
@@ -20,7 +20,7 @@ resource "aws_db_instance" "rds_instance" {
   username                = "codepulse"
   password                = random_password.rds_password.result # use the random password generated in secrets.tf
   db_subnet_group_name    = aws_db_subnet_group.rds_subnet_group.name
-  vpc_security_group_ids  = [module.security.rds_sg_id]
+  vpc_security_group_ids  = [var.rds_sg_id]
   deletion_protection     = false # set to true in production to prevent accidental deletion, false so destroy is easier
   skip_final_snapshot     = true  # set to false in production to take a final snapshot before deletion
   publicly_accessible     = false # rds should not be publicly accessible, only accessible from the vpc

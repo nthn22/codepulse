@@ -43,7 +43,7 @@ resource "aws_iam_role_policy" "read_secrets" {
     Statement = [{
       Effect = "Allow"
       Action = ["secretsmanager:GetSecretValue"] # get secret
-      Resource = [aws_secretsmanager_secret.jwt_secret.arn, aws_secretsmanager_secret.db_secret.arn,
+      Resource = [aws_secretsmanager_secret.jwt_secret.arn, module.database.db_secret_arn,
       aws_secretsmanager_secret.claude_secret.arn] # secret arns
     }]
   })
@@ -76,7 +76,7 @@ resource "aws_ecs_task_definition" "app" {
     # give the task definition the secrets
     secrets = [
       { name = "JWT_SECRET", valueFrom = aws_secretsmanager_secret.jwt_secret.arn },
-      { name = "DATABASE_URL", valueFrom = aws_secretsmanager_secret.db_secret.arn },
+      { name = "DATABASE_URL", valueFrom = module.database.db_secret_arn },
       { name = "ANTHROPIC_API_KEY", valueFrom = aws_secretsmanager_secret.claude_secret.arn }
 
     ]
