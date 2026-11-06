@@ -1,5 +1,23 @@
 # rds config file
 
+# db random password
+resource "random_password" "rds_password" {
+  length           = 16
+  special          = true
+  override_special = "-_"
+}
+
+# db secrets manager
+resource "aws_secretsmanager_secret" "db_secret" {
+  name                    = "${var.project_name}-db-secret"
+  recovery_window_in_days = 0
+}
+
+# create a secret version for the jwt secret
+resource "aws_secretsmanager_secret_version" "jwt_secret_version" {
+  secret_id     = aws_secretsmanager_secret.jwt_secret.id
+  secret_string = random_password.jwt_secret.result
+}
 # rds subnet group
 resource "aws_db_subnet_group" "rds_subnet_group" {
   name       = "${var.project_name}-rds-subnet-group"

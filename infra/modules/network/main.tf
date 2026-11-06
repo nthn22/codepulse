@@ -27,8 +27,8 @@ locals {
     public_b     = { cidr = "10.0.2.0/24", az = local.azs[1], tier = "public" }
     app_a        = { cidr = "10.0.11.0/24", az = local.azs[0], tier = "app" }
     app_b        = { cidr = "10.0.12.0/24", az = local.azs[1], tier = "app" }
-    private_db_a = { cidr = "10.0.21.0/24", az = local.azs[0], tier = "private" }
-    private_db_b = { cidr = "10.0.22.0/24", az = local.azs[1], tier = "private" }
+    private_db_a = { cidr = "10.0.21.0/24", az = local.azs[0], tier = "db" }
+    private_db_b = { cidr = "10.0.22.0/24", az = local.azs[1], tier = "db" }
   }
 }
 
