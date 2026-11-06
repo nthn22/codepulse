@@ -40,11 +40,9 @@ variable "alert_email" {
 variable "alb_arn_suffix" {
   description = "ARN suffix of the ALB to monitor"
   type        = string
-  default = module.load_balancer.alb_arn_suffix
 }
 
 variable "waf_name" {
   description = "Name of the WAF to monitor"
   type        = string
-  default = module.load_balancer.waf_name
 }

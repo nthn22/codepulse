@@ -153,7 +153,6 @@ resource "aws_ecs_service" "app" {
     container_name   = local.container_name
     container_port   = 3001
   }
-
 }
 
 #secrets for the project

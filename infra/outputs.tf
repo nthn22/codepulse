@@ -2,7 +2,7 @@
 
 # output ecr repository url
 output "repository_url" {
-  value = aws_ecr_repository.codepulse.repository_url
+  value = module.app.respository_url
 }
 
 #alb url using alb dns name
@@ -12,15 +12,15 @@ output "alb_url" {
 
 #ecs service name
 output "ecs_service_name" {
-  value = aws_ecs_service.app.name
+  value = module.app.ecs_service_name
 }
 
 #ecs cluster name
 output "ecs_cluster_name" {
-  value = aws_ecs_cluster.main.name
+  value = module.app.ecs_cluster_name
 }
 
 #log group name
 output "log_group_name" {
-  value = aws_cloudwatch_log_group.ecs.name
+  value = module.app.log_group_name
 }
