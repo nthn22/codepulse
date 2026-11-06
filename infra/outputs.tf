@@ -7,7 +7,7 @@ output "repository_url" {
 
 #alb url using alb dns name
 output "alb_url" {
-  value = "http://${aws_lb.alb.dns_name}"
+  value = "http://${module.load_balancer.alb_dns_name}"
 }
 
 #ecs service name

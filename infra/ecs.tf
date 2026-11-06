@@ -109,11 +109,11 @@ resource "aws_ecs_service" "app" {
   }
 
   load_balancer {
-    target_group_arn = aws_lb_target_group.alb_target_group.arn
+    target_group_arn = module.load_balancer.target_group_arn
     container_name   = local.container_name
     container_port   = 3001
   }
   # make sure the alb listener is ready before starting the service
-  depends_on = [aws_lb_listener.alb_listener]
+  depends_on = [module.load_balancer.alb_listener]
 
 }

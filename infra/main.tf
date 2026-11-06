@@ -23,3 +23,12 @@ module "database" {
   db_subnet_ids  = module.network.db_subnet_ids
   rds_sg_id      = module.security.rds_sg_id
 }
+
+# create load balancer module
+module "load_balancer" {
+  source            = "./modules/load_balancer"
+  project_name      = var.project_name
+  vpc_id            = module.network.vpc_id
+  public_subnet_ids = module.network.public_subnet_ids
+  alb_sg_id         = module.security.alb_sg_id
+}
