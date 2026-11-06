@@ -35,6 +35,7 @@ module "load_balancer" {
 
 module "app" {
   source           = "./modules/app"
+  region           = var.region
   project_name     = var.project_name
   app_subnet_ids   = module.network.app_subnet_ids
   task_sg_id       = module.security.task_sg_id
@@ -49,6 +50,7 @@ module "app" {
 
 module "monitoring" {
   source         = "./modules/monitoring"
+  region         = var.region
   project_name   = var.project_name
   alert_email    = var.alert_email
   alb_arn_suffix = module.load_balancer.alb_arn_suffix
