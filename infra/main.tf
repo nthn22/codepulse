@@ -13,15 +13,15 @@ module "network" {
 module "security" {
   source       = "./modules/security"
   project_name = var.project_name
-  vpc_id       = module.network.vpc_id   # root passes it in
+  vpc_id       = module.network.vpc_id # root passes it in
 }
 
 # create database module
 module "database" {
-  source         = "./modules/database"
-  project_name   = var.project_name
-  db_subnet_ids  = module.network.db_subnet_ids
-  rds_sg_id      = module.security.rds_sg_id
+  source        = "./modules/database"
+  project_name  = var.project_name
+  db_subnet_ids = module.network.db_subnet_ids
+  rds_sg_id     = module.security.rds_sg_id
 }
 
 # create load balancer module
@@ -34,23 +34,23 @@ module "load_balancer" {
 }
 
 module "app" {
-  source            = "./modules/app"
-  project_name      = var.project_name
-  app_subnet_ids    = module.network.app_subnet_ids
-  task_sg_id        = module.security.task_sg_id
-  target_group_arn  = module.load_balancer.target_group_arn
-  db_secret_arn     = module.database.db_secret_arn
-  use_nat_gateway   = var.use_nat_gateway
-  desired_count     = var.desired_count
-  image_tag = var.image_tag
-    # make sure the load balancer module exists
+  source           = "./modules/app"
+  project_name     = var.project_name
+  app_subnet_ids   = module.network.app_subnet_ids
+  task_sg_id       = module.security.task_sg_id
+  target_group_arn = module.load_balancer.target_group_arn
+  db_secret_arn    = module.database.db_secret_arn
+  use_nat_gateway  = var.use_nat_gateway
+  desired_count    = var.desired_count
+  image_tag        = var.image_tag
+  # make sure the load balancer module exists
   depends_on = [module.load_balancer]
 }
 
 module "monitoring" {
-  source       = "./modules/monitoring"
-  project_name = var.project_name
-  alert_email = var.alert_email
+  source         = "./modules/monitoring"
+  project_name   = var.project_name
+  alert_email    = var.alert_email
   alb_arn_suffix = var.alb_arn_suffix
-  waf_name = var.waf_name
+  waf_name       = var.waf_name
 }
