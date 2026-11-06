@@ -13,10 +13,17 @@ resource "aws_secretsmanager_secret" "db_secret" {
   recovery_window_in_days = 0
 }
 
-# create a secret version for the jwt secret
-resource "aws_secretsmanager_secret_version" "jwt_secret_version" {
-  secret_id     = aws_secretsmanager_secret.jwt_secret.id
-  secret_string = random_password.jwt_secret.result
+
+# create a secret version for the db secret
+resource "aws_secretsmanager_secret_version" "db_secret_version" {
+  secret_id     = aws_secretsmanager_secret.db_secret.id
+  secret_string = "postgresql://${aws_db_instance.rds_instance.username}:${random_password.rds_password.result}@${aws_db_instance.rds_instance.address}:5432/${aws_db_instance.rds_instance.db_name}"
+  # postgresql is the protocol prisma expects
+  # ${aws_db_instance.rds_instance.username} is the username
+  # ${random_password.rds_password.result} is the password
+  # ${aws_db_instance.rds_instance.address} is the RDS hostname (address, not endpoint)
+  # 5432 is the default port for postgres
+  # ${aws_db_instance.rds_instance.db_name} is the database name
 }
 # rds subnet group
 resource "aws_db_subnet_group" "rds_subnet_group" {
