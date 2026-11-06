@@ -5,16 +5,6 @@
 # gateways as the exit. route tables determine which exit the data takes
 # the associations connect each tier to its route table
 
-
-# create network module
-module "network" {
-  source = "./modules/network"
-
-  project_name    = var.project_name
-  vpc_cidr        = var.vpc_cidr
-  use_nat_gateway = var.use_nat_gateway
-}
-
 # define the VPC
 resource "aws_vpc" "main_vpc" {
   cidr_block           = var.vpc_cidr
@@ -57,7 +47,7 @@ resource "aws_subnet" "this" {
 
 # create the Internet Gateway 
 resource "aws_internet_gateway" "main_gw" {
-  vpc_id = aws_vpc_main_vpc.id
+  vpc_id = aws_vpc.main_vpc.id
 
   tags = {
     Name = "${var.project_name}-igw"
@@ -160,7 +150,7 @@ resource "aws_route_table_association" "app_rt_assoc" {
 
 # private route table association
 resource "aws_route_table_association" "private_rt_assoc" {
-  for_each = { for k, v in local.subnets : k => v if v.tier == "private" }
+  for_each = { for k, v in local.subnets : k => v if v.tier == "db" }
 
   subnet_id      = aws_subnet.this[each.key].id
   route_table_id = aws_route_table.db_rt.id

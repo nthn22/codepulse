@@ -9,7 +9,7 @@ resource "aws_lb" "alb" {
   internal                   = false
   load_balancer_type         = "application"
   security_groups            = [aws_security_group.alb_sg.id]
-  subnets                    = [for k, v in local.subnets : aws_subnet.this[k].id if v.tier == "public"] # get all public subnets for the alb
+  subnets                    = [for k, v in module.network.public_subnet.ids : aws_subnet.this[k].id if v.tier == "public"] # get all public subnets for the alb
   enable_deletion_protection = false                                                                     # set to true in production to prevent accidental deletion, false so destroy is easier
   tags = {
     Name = "${var.project_name}-alb"
@@ -22,7 +22,7 @@ resource "aws_lb_target_group" "alb_target_group" {
   name                 = "${var.project_name}-alb-target-group"
   port                 = 3001
   protocol             = "HTTP"
-  vpc_id               = aws_vpc.main_vpc.id
+  vpc_id               = module.network.vpc_id
   target_type          = "ip" # fargate registers tasks by IP address, not instance ID
   deregistration_delay = 30   # so deploy and destroy don't hang for 5 minute (default)
   health_check {

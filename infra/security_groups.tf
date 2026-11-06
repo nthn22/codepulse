@@ -8,21 +8,21 @@
 
 resource "aws_security_group" "alb_sg" {
   name   = "${var.project_name}-alb-sg"
-  vpc_id = aws_vpc.main_vpc.id
+  vpc_id = module.network.vpc_id
 }
 
 #create security group for the task
 
 resource "aws_security_group" "task_sg" {
   name   = "${var.project_name}-task-sg"
-  vpc_id = aws_vpc.main_vpc.id
+  vpc_id = module.network.vpc_id
 }
 
 #create security group for RDS
 
 resource "aws_security_group" "rds_sg" {
   name   = "${var.project_name}-rds-sg"
-  vpc_id = aws_vpc.main_vpc.id
+  vpc_id = module.network.vpc_id
 }
 
 # create ingress rule for ALB security group 
